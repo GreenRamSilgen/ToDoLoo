@@ -1,0 +1,18 @@
+
+.container{
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    width: max-content;
+    background-color: gray;
+    padding: 20px;
+
+}
+
+#left{
+    background-color: red;
+}
+
+#right{
+    background-color: blue;
+}
