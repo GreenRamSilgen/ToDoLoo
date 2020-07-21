@@ -1,18 +1,25 @@
 
-.container{
+#board{
     display: flex;
     flex-direction: row;
-    height: 50px;
-    width: max-content;
+    height: fit-content;
+    width: 100%;
     background-color: gray;
     padding: 20px;
 
 }
 
-#left{
-    background-color: red;
+
+.card{
+    background: darkcyan;
+    padding: 10px;
+    margin: 10px;
 }
 
-#right{
-    background-color: blue;
+.card-holder{
+    background: lavender;
+    width: inherit;
+    height: auto;
+    padding: 10px;
+    margin: 10px;
 }
