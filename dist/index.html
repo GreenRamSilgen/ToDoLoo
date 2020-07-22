@@ -10,27 +10,79 @@
     />
   </head>
   <body>
+    <!-- BOARD 1 -->
     <div id="board">
-      <div id="container1" class="card-holder">
-        <div class="card">
-          <div>ELEMENT</div>
+      <div class="b-card">
+        <div class="b-card__head">
+          <div class="b-card__head--title">
+            TITLE
+          </div>
+          <button class="b-card__head--closebtn">
+            x
+          </button>
+        </div>
+        <div id="container1" class="b-card__body">
+          <div class="item">
+            <input type="checkbox" class="item__checkbox"></input>
+            <div class="item__content">ELEMENT</div>
+            <button class="item__removeBtn">X</button>
+          </div>
+        </div>
+        <div class="b-card__foot">
+          <button class="b-card__foot--btn">+ Add Item</button>
         </div>
       </div>
-      <div id="container2" class="card-holder">
-        <div class="card">
-          <div>ONE</div>
-        </div>
-      </div>
+      <!-- BOARD 1 -->
 
-      <div id="container3" class="card-holder">
-        <div class="card">
-          <div>KEK</div>
+
+      <!-- BOARD 2 -->
+        <div class="b-card">
+          <div class="b-card__head">
+            <div class="b-card__head--title">
+              TITLE
+            </div>
+            <button class="b-card__head--closebtn">
+              x
+            </button>
+          </div>
+          <div id="container1" class="b-card__body">
+            <div class="item">
+              <input type="checkbox" class="item__checkbox"></input>
+              <div class="item__content">ELEMENT</div>
+              <button class="item__removeBtn">X</button>
+            </div>
+          </div>
+          <div class="b-card__foot">
+            <button class="b-card__foot--btn">+ Add Item</button>
+          </div>
         </div>
-      </div>
+        <!-- BOARD 2 -->
+
+        <!-- BOARD 3 -->
+          <div class="b-card">
+            <div class="b-card__head">
+              <div class="b-card__head--title">
+                TITLE
+              </div>
+              <button class="b-card__head--closebtn">
+                x
+              </button>
+            </div>
+            <div id="container1" class="b-card__body">
+              <div class="item">
+                <input type="checkbox" class="item__checkbox"></input>
+                <div class="item__content">ELEMENT</div>
+                <button class="item__removeBtn">X</button>
+              </div>
+            </div>
+            <div class="b-card__foot">
+              <button class="b-card__foot--btn">+ Add Item</button>
+            </div>
+          </div>
+          <!-- BOARD 3 -->
     </div>
-    <div id="board2">
-      
-    </div>
+    
+
     <!-- Scripts -->
     <script src="main.js"></script>
   </body>
