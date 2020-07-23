@@ -10,6 +10,9 @@
     />
   </head>
   <body>
+    <div class="makeList">
+      <button id="newList">New List</button>
+    </div>
     <!-- BOARD 1 -->
     <div id="board">
       <div class="b-card">
@@ -59,7 +62,7 @@
         <!-- BOARD 2 -->
 
         <!-- BOARD 3 -->
-          <div class="b-card">
+          <div class="b-card" data-group="2">
             <div class="b-card__head">
               <div class="b-card__head--title">
                 TITLE
@@ -83,7 +86,21 @@
     </div>
     
 
-    <!-- Scripts -->
-    <script src="main.js"></script>
+
   </body>
+
+<!-- Modal Section-->
+<div class="bg-modal">
+  <div class="modal__content">
+    <div class="close">+</div>
+    <form id="userInput">
+      <legend style="text-align: center;">New List</legend>
+      <input type="text" name="title" placeholder="List Name" required>
+      <input type="submit" id="modalSubmit" class="newListBtn">
+    </form>
+  </div>
+</div>
+<!-- Modal Section-->
+        <!-- Scripts -->
+        <script src="main.js"></script>
 </html>
