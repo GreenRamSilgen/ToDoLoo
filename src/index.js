@@ -21,7 +21,7 @@ document.querySelectorAll(".b-card__body").forEach((block) => {
 
 let UIController = (function () {
     let DOMStrings = {
-        
+
         newList: 'newList',
         newListModal: '.bg-modal',
         newListSubmit: 'modalSubmit',
@@ -36,7 +36,15 @@ let UIController = (function () {
         cardHeadTitle: 'b-card__head--title',
         cardHeadClose: 'b-card__head--closebtn',
         cardBody: 'b-card__body',
+        //body
+        itemId:"data-item",
+        item: "item",
+        itemCheck: "item__checkbox",
+        itemContent: "item__content",
+        itemRemove: "item__removeBtn",
+        //body
         cardFooter: 'b-card__foot',
+        cardFooterInput: 'b-card__foot--input',
         cardFooterAddBtn: 'b-card__foot--btn',
     }
     //!GET BOARD
@@ -84,15 +92,10 @@ let UIController = (function () {
         getDOMStrings: function () {
             return DOMStrings;
         },
+        //BIG LIST
         findBigListX,
-        removeBigList:function (stuff) {
+        removeBigList: function (stuff) {
             stuff.remove();
-            // let bigToRemove = document.querySelectorAll("."+DOMStrings.cardHolder);
-            // bigToRemove.forEach((card) =>{
-            //     if(card.getAttribute(DOMStrings.dataGroup) === id){
-            //         card.remove();
-            //     }
-            // });
         },
         renderEmptyList: function (name, id) {
             console.log(name + " id" + id);
@@ -115,7 +118,12 @@ let UIController = (function () {
             //create card's footer
             let cardFooter = makeDiv(DOMStrings.cardFooter, id);
             let cardFooterAddBtn = makeBtn(DOMStrings.cardFooterAddBtn, id);
+            let cardFooterInput = document.createElement("input");
+            cardFooterInput.setAttribute("class", DOMStrings.cardFooterInput);
+            cardFooter.setAttribute("data-group",id);
+            cardFooter.setAttribute("placeholder", "New Task")
             cardFooterAddBtn.textContent = "+ Add Item";
+            cardFooter.appendChild(cardFooterInput);
             cardFooter.appendChild(cardFooterAddBtn);
 
             //add it all to the card holder
@@ -130,6 +138,32 @@ let UIController = (function () {
             //dragula test
             drake.containers.push(cardBody);
             return cardHolder;
+        },
+        //TASKS
+        addTask:function({cBody,input, itemId}){
+            let item = makeDiv(DOMStrings.item);
+            item.setAttribute(DOMStrings.itemId, itemId);
+            let checkbox = document.createElement("input");
+            checkbox.setAttribute("class", DOMStrings.itemCheck);
+            checkbox.setAttribute("type","checkbox");
+            
+            //set content
+            let content = makeDiv(DOMStrings.itemContent);
+            content.textContent = input.value;
+            let removeItem = makeBtn(DOMStrings.itemRemove);
+            removeItem.textContent = "X";
+            //append to item
+            item.appendChild(checkbox);
+            item.appendChild(content);
+            item.appendChild(removeItem);
+
+            //append to actual card body
+            cBody.appendChild(item);
+
+            return {item,removeItem};
+        },
+        removeTask:function(item){
+            item.remove();
         },
         //MODAL TOGGLE
         newListToggle: function () {
@@ -147,7 +181,7 @@ let UIController = (function () {
 
 let MainController = (function (UICtrl, LogicCtrl) {
     let DOMStrings = UICtrl.getDOMStrings();
-    //add eventlistener for each list's add button
+
 
 
     //!NEW LIST MAKER
@@ -168,10 +202,28 @@ let MainController = (function (UICtrl, LogicCtrl) {
         UICtrl.newListToggle();
 
         // * ADD FUNCTIONALITY TO CARD'S CLOSE BUTTON
-        newCard.addEventListener('click', () => {
+        newCard.firstChild.lastChild.addEventListener('click', () => {
             LogicCtrl.removeBigList(id);
             UICtrl.removeBigList(newCard);
         })
+
+        //!TASK ADDER for List
+
+        //add eventlistener for each list's add button
+        newCard.lastChild.lastChild.addEventListener('click',()=>{
+            let input = newCard.lastChild.firstChild;
+            console.log(newCard.lastChild.firstChild.value);
+            
+            //TODO IMPLEMENT TASK UI AND LOGIC ON ADD
+            let itemId = LogicCtrl.addTask({id,input});
+            let  cBody = newCard.firstChild.nextSibling;
+            let newItem = UICtrl.addTask({cBody, input, itemId});
+            newItem.removeItem.addEventListener('click',()=>{
+                UICtrl.removeTask(newItem.item);
+                LogicCtrl.removeTask({id,itemId});
+            })
+            input.value = "";
+        });
     }
 
     //just close if they press x

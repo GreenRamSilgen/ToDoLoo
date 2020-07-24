@@ -26,6 +26,7 @@ let listController = (function(storageCtrl){
             bigListNames.push(name);
             return bigListNames.length-1;
         },
+        //BIG LIST
         getBigLists: function(){
             return bigList
         },
@@ -35,6 +36,15 @@ let listController = (function(storageCtrl){
             bigList.splice(id,1,null);
             bigListNames.splice(id,1,null);
             console.log(bigListNames);
+        },
+
+        //TASKS
+        addTask: function({id,input}){
+            bigList[id].push(TodoItem(false,input.value));
+            return bigList[id].length-1;
+        },
+        removeTask:function({id,itemId}){
+            bigList[id].splice(itemId,1);
         },
         run:function(){
             console.log(storageCtrl.checkStorageFor("lel"));
