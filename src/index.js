@@ -85,13 +85,14 @@ let UIController = (function () {
             return DOMStrings;
         },
         findBigListX,
-        removeBigList:function (id) {
-            let bigToRemove = document.querySelectorAll("."+DOMStrings.cardHolder);
-            bigToRemove.forEach((card) =>{
-                if(card.getAttribute(DOMStrings.dataGroup) === id){
-                    card.remove();
-                }
-            });
+        removeBigList:function (stuff) {
+            stuff.remove();
+            // let bigToRemove = document.querySelectorAll("."+DOMStrings.cardHolder);
+            // bigToRemove.forEach((card) =>{
+            //     if(card.getAttribute(DOMStrings.dataGroup) === id){
+            //         card.remove();
+            //     }
+            // });
         },
         renderEmptyList: function (name, id) {
             console.log(name + " id" + id);
@@ -128,6 +129,7 @@ let UIController = (function () {
             //TODO: Potentially Relocate dragula container
             //dragula test
             drake.containers.push(cardBody);
+            return cardHolder;
         },
         //MODAL TOGGLE
         newListToggle: function () {
@@ -162,34 +164,20 @@ let MainController = (function (UICtrl, LogicCtrl) {
         //in logic side add a new empty list to the bigList array
         let id = LogicCtrl.addEmptyTodo(userIn.title.value);
         //in the UI side update visual
-        UICtrl.renderEmptyList(userIn.title.value, id);
+        let newCard = UICtrl.renderEmptyList(userIn.title.value, id);
         UICtrl.newListToggle();
-        UICtrl.findBigListX();
-        bigListCloseEvent();
+
+        // * ADD FUNCTIONALITY TO CARD'S CLOSE BUTTON
+        newCard.addEventListener('click', () => {
+            LogicCtrl.removeBigList(id);
+            UICtrl.removeBigList(newCard);
+        })
     }
 
     //just close if they press x
     let pressX = UICtrl.getPopUpCloser();
     pressX.addEventListener('click', UICtrl.newListToggle);
 
-    //!REMOVE BIG LIST ON X PRESS
-    bigListCloseEvent();
-
-
-
-
-    //update biglist close button action
-    function bigListCloseEvent() {
-        let bigListRemove = UICtrl.getBigListCloseButtons();
-        bigListRemove.forEach((button) => {
-            button.addEventListener('click', () => {
-                let id=button.getAttribute(DOMStrings.dataGroup);
-                //TODO IMPLEMENT THESE FUNCTIONS
-                //LogicCtrl.removeBigList(id);
-                UICtrl.removeBigList(id);
-            });
-        });
-    }
 
 
     function init() {

@@ -29,6 +29,13 @@ let listController = (function(storageCtrl){
         getBigLists: function(){
             return bigList
         },
+        removeBigList:function(id){
+            //id is index  in biglist
+            console.log(bigListNames);
+            bigList.splice(id,1,null);
+            bigListNames.splice(id,1,null);
+            console.log(bigListNames);
+        },
         run:function(){
             console.log(storageCtrl.checkStorageFor("lel"));
         }
