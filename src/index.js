@@ -107,7 +107,7 @@ let UIController = (function () {
             let cardHeadTitle = makeDiv(DOMStrings.cardHeadTitle, id);
             cardHeadTitle.textContent = name;
             let cardHeadClose = makeBtn(DOMStrings.cardHeadClose, id);
-            cardHeadClose.textContent = "X";
+            cardHeadClose.textContent = "+";
             cardHeader.appendChild(cardHeadTitle);
             cardHeader.appendChild(cardHeadClose);
 
@@ -151,7 +151,7 @@ let UIController = (function () {
             let content = makeDiv(DOMStrings.itemContent);
             content.textContent = input.value;
             let removeItem = makeBtn(DOMStrings.itemRemove);
-            removeItem.textContent = "X";
+            removeItem.textContent = "+";
             //append to item
             item.appendChild(checkbox);
             item.appendChild(content);
