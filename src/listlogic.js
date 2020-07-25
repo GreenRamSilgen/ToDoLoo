@@ -17,7 +17,7 @@ let storageController = (function(){
     }
 })();
 
-let listController = (function(storageCtrl){
+let listController = (function(){
     let bigList = [];
     let bigListNames = [];
     return{
@@ -46,13 +46,11 @@ let listController = (function(storageCtrl){
         removeTask:function({id,itemId}){
             bigList[id].splice(itemId,1);
         },
-        run:function(){
-            console.log(storageCtrl.checkStorageFor("lel"));
-        }
     }
-})(storageController);
+})();
 
 
 export{
-    listController
+    listController,
+    storageController
 }
