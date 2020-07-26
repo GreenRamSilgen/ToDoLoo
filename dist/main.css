@@ -85,7 +85,8 @@ footer {
 #board{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
     height: fit-content;
     width: 100%;
     background-color: var(--backColor);
@@ -99,10 +100,12 @@ footer {
 /* !CARD MAIN*/
 .b-card{
     background: var(--cardBack);
-    margin: 0px 5px;
+    margin: 10px 5px;
     padding: 10px;
     border-radius: 5px;
-    width: 100%;
+    min-width: 25%;
+    max-width: fit-content;
+    height: fit-content;
 }
 
 
