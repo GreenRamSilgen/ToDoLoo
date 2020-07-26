@@ -160,7 +160,7 @@ let UIController = (function () {
             
             //set content
             let content = makeDiv(DOMStrings.itemContent);
-            content.textContent = input.value;
+            content.textContent = input;
             let removeItem = makeBtn(DOMStrings.itemRemove);
             removeItem.textContent = "+";
             //append to item

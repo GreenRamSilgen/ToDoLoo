@@ -7,13 +7,13 @@ let TodoItem = (checked=false, msg="...") =>{
 }
 
 let storageController = (function(){
-    function checkStorageFor(item){
-        return (window.localStorage.getItem(item)) ? true : false;
-    }
-    function storeBigCards(item){
-    }
     return{
-        checkStorageFor
+        getStoredList: function(name){
+            return window.localStorage.getItem(name);
+        },
+        storeList:function({name,list}){
+            window.localStorage.setItem(name,JSON.stringify(list));
+        }
     }
 })();
 
@@ -39,8 +39,8 @@ let listController = (function(){
         },
 
         //TASKS
-        addTask: function({id,input}){
-            bigList[id].push(TodoItem(false,input.value));
+        addTask: function({id,input,state=false}){
+            bigList[id].push(TodoItem(state,input));
             return bigList[id].length-1;
         },
         removeTask:function({id,itemId}){
