@@ -2,85 +2,44 @@ import {
     UIController
 } from './uiControl'
 import {
-    listController,
     storageController
-} from './listlogic'
-
-//TODO: MAKE ADD ITEM BUTTON FUNCTIONAL FOR EACH LIST
-//TODO: UI AND LOGIC NEED TO BE UPDATED AT SAME TIME
+} from './storeControl'
 
 
-
-
-
-let MainController = (function (UICtrl, LogicCtrl, StoreCtrl) {
+let MainController = (function (UICtrl, StoreCtrl) {
     let DOMStrings = UICtrl.getDOMStrings();
 
-
-
-    //!NEW LIST MAKER
-    //popup the menu when user clicks New List Button
+    //!NEW LIST BUTTON and MODAL
+    //Get New List Button and Modal PopUP DOM
     let newToDoBtn = UICtrl.getNewTodoButton();
-    newToDoBtn.addEventListener('click', UICtrl.newListToggle);
-
-    //ONSubmit with info create new ToDoList
-    let userIn = document.querySelector("#userInput");
-    userIn.onsubmit = function (e) {
-        e.preventDefault();
-        //addBookToLibrary(new Book(userIn.title.value, userIn.author.value, userIn.pages.value, userIn.read.checked));
-
-        //in logic side add a new empty list to the bigList array
-        let id = LogicCtrl.addEmptyTodo(userIn.title.value);
-        //in the UI side update visual
-        let newCard = UICtrl.renderEmptyList(userIn.title.value, id);
-        UICtrl.newListToggle();
-
-        // * ADD FUNCTIONALITY TO CARD'S CLOSE BUTTON
-        newCard.firstChild.lastChild.addEventListener('click', () => {
-            LogicCtrl.removeBigList(id);
-            UICtrl.removeBigList(newCard);
-        })
-
-        //!TASK ADDER for List
-
-        //add eventlistener for each list's add button
-        newCard.lastChild.lastChild.addEventListener('click', () => {
-            let input = newCard.lastChild.firstChild.value;
-            console.log(newCard.lastChild.firstChild.value);
-
-            //TODO IMPLEMENT TASK UI AND LOGIC ON ADD
-            let itemId = LogicCtrl.addTask({
-                id,
-                input
-            });
-            let cBody = newCard.firstChild.nextSibling;
-            let newItem = UICtrl.addTask({
-                cBody,
-                input,
-                itemId
-            });
-            newItem.removeItem.addEventListener('click', () => {
-                UICtrl.removeTask(newItem.item);
-                LogicCtrl.removeTask({
-                    id,
-                    itemId
-                });
-            })
-            input = "";
-        });
-    }
-
-    //just close if they press x
     let pressX = UICtrl.getPopUpCloser();
+
+
+    //POPUP MODAL IF USER PRESSES NEW BUTTON
+    newToDoBtn.addEventListener('click', UICtrl.newListToggle);    
+    
+    //CLOSE MODAL IF USER PRESSES X
     pressX.addEventListener('click', UICtrl.newListToggle);
 
 
+    //Make bigList if user SUBMITS MODAL
+    let userIn = document.querySelector("#userInput");
+    userIn.onsubmit = function (e) {
+        e.preventDefault();
+
+        let newCard = UICtrl.renderEmptyList(userIn.title.value);
+        UICtrl.newListToggle();
+
+        giveBigListCloseBtnFunctionality(newCard);
+        giveAddItemBtnFuncionality(newCard);
+    }
+
 
     /**
+     * !LOCAL STORAGE ON CLOSE
+     * 
      * Save current todo list and tasks for each in local storage
      * when the user closes tab/window.
-     * 
-     * !LOCAL STORAGE ON CLOSE
      */
     window.addEventListener('beforeunload', () => {
         let list = UICtrl.getCurrentLists();
@@ -97,80 +56,82 @@ let MainController = (function (UICtrl, LogicCtrl, StoreCtrl) {
 
     //!INITIALIZE
     function init() {
-        console.log("INIT");
-        //check local storage for old lists.
+        //CHECK LOCAL STORAGE
         let bigList = JSON.parse(StoreCtrl.getStoredList(DOMStrings.todo));
         let bigListNames = JSON.parse(StoreCtrl.getStoredList(DOMStrings.todoNames));
 
-        //if there are elements load otherwise do nothing.
+        //IF LOCAL STORAGE HAD ITEMS GENERATE THEM TO DOM
         if (bigListNames.length !== 0) {
             for (let i = 0; i < bigListNames.length; i++) {
-                let id = LogicCtrl.addEmptyTodo(bigListNames[i]);
-                let newCard = UICtrl.renderEmptyList(bigListNames[i], id);
+                //Make new BigList card from the stored Array
+                let newCard = UICtrl.renderEmptyList(bigListNames[i]);
                 
                 //ADD EVENTS FOR NEWLY CREATED CARD
-                newCard.firstChild.lastChild.addEventListener('click', () => {
-                    LogicCtrl.removeBigList(id);
-                    UICtrl.removeBigList(newCard);
-                })
-                newCard.lastChild.lastChild.addEventListener('click', () => {
-                    let input = newCard.lastChild.firstChild.value;
-        
-                    //TODO IMPLEMENT TASK UI AND LOGIC ON ADD
-                    let itemId = LogicCtrl.addTask({
-                        id,
-                        input,
-                        state:false,
-                    });
-                    let cBody = newCard.firstChild.nextSibling;
-                    let newItem = UICtrl.addTask({
-                        cBody,
-                        input,
-                        itemId
-                    });
-                    newItem.removeItem.addEventListener('click', () => {
-                        UICtrl.removeTask(newItem.item);
-                        LogicCtrl.removeTask({
-                            id,
-                            itemId
-                        });
-                    })
-                    input = "";
-                });
+                giveBigListCloseBtnFunctionality(newCard);
+                giveAddItemBtnFuncionality(newCard);
 
-                //ADD STORED TASKS
-                for(let j = 0; j < bigList[i].length; j++){
-                    let itemId = LogicCtrl.addTask({
-                        id:i,
-                        input:bigList[i][j].itemMsg,
-                        state:bigList[i][j].checkbox,
-                    });
-                    let cBody = newCard.firstChild.nextSibling;
+
+                //Create all tasks that this Particular bigList has stored and add to DOM
+                for(let j = 0; j < bigList[i].length; j++){ 
+                    //add task to dom
                     let newItem = UICtrl.addTask({
-                        cBody,
-                        input:bigList[i][j].itemMsg,
-                        itemId
+                        cBody: newCard.firstChild.nextSibling,
+                        input: bigList[i][j].itemMsg,
+                        checkBox: bigList[i][j].checkbox,
                     });
-                    newItem.removeItem.addEventListener('click', () => {
-                        UICtrl.removeTask(newItem.item);
-                        LogicCtrl.removeTask({
-                            id,
-                            itemId
-                        });
-                    })
+                    addItemCloseBtnFunctionality(newItem);
                 }
             }
         } else {
             console.log("LOCAL STORAGE IS EMPTY");
         }
-        //display the lists with UIController
-
-        //add dragula to the generated UI.
     }
+
+    /**
+     * @param {Card Holder Base Element} card
+     * 
+     * Give the close button of the bigList functionality.
+     * So if you press it it will delete that bigList from DOM.
+     */
+    function giveBigListCloseBtnFunctionality(card){
+        card.firstChild.lastChild.addEventListener('click', () => {
+            UICtrl.removeBigList(card);
+        });
+    }
+
+    /**
+     * @param {Card Holder Base Element} card
+     * 
+     * Give add task button of the given card functionality.
+     * If it is pressed a new Item will be generated and added to DOM.
+     */
+    function giveAddItemBtnFuncionality(card){
+        card.lastChild.lastChild.addEventListener('click', () => {
+            let newItem = UICtrl.addTask({
+                cBody:card.firstChild.nextSibling,
+                input:card.lastChild.firstChild.value,
+            });
+            addItemCloseBtnFunctionality(newItem);
+            card.lastChild.firstChild.value = "";
+        });
+    }
+
+    /**
+     * @param {Task Base Element} item
+     * 
+     * Adds functinality to the close button of the passed task.
+     */
+    function addItemCloseBtnFunctionality(item){
+        item.removeItemBtn.addEventListener('click', () => {
+            UICtrl.removeTask(newItem.item);
+        });
+    }
+
+
     return {
         init
     }
-})(UIController, listController, storageController)
+})(UIController, storageController)
 
 
 //Run initializer once page has loaded

@@ -41,21 +41,16 @@ let UIController = (function () {
     //!Remove big list
     let rmvListBtn = document.querySelectorAll("." + DOMStrings.cardHeadClose);
 
-    function findBigListX() {
-        rmvListBtn = document.querySelectorAll("." + DOMStrings.cardHeadClose);
-    }
 
-    function makeDiv(className, id) {
+    function makeDiv(className) {
         let newDiv = document.createElement('div');
         newDiv.setAttribute('class', className);
-        newDiv.setAttribute(DOMStrings.dataGroup, id);
         return newDiv;
     }
 
-    function makeBtn(className, id) {
+    function makeBtn(className) {
         let newBtn = document.createElement('button');
         newBtn.setAttribute('class', className);
-        newBtn.setAttribute(DOMStrings.dataGroup, id);
         return newBtn;
     }
     return {
@@ -74,64 +69,65 @@ let UIController = (function () {
         getDOMStrings: function () {
             return DOMStrings;
         },
-        //Returns an array of names and array of item objects which have {checked,msg}
+        /**
+         * GOES THROUGH THE DOM IN CURRENT STATE THEN,
+         * 
+         * Returns An Object that has {bigList, bigListNames};
+         * *bigList: Holds array of objects at each index. {checkbox,itemMsg}
+         *        *checkbox: if the item was checked off or not.
+         *        *itemMsg: the description of the item
+         * 
+         * *bigListNames: Array that holds the title of each bigList in the DOM
+         */
         getCurrentLists:function(){
             let bigListNames = [];
             let bigList = [];
-            //get all lists
             let list = document.querySelectorAll(`.${DOMStrings.cardHolder}`);
-            
-            
             let listNum = 0;
+
             list.forEach((todo) =>{ //loops through each todo list
                 bigList.push([]);
-                let title = todo.firstChild.firstChild.textContent;
-                let body = todo.firstChild.nextSibling;
-                let bodyItems = body.childNodes;
 
-                //store name of this list in array
-                bigListNames.push(title);
+                //contains all task items of this todo list
+                let bodyItems = todo.firstChild.nextSibling.childNodes;
+
+                //Store title of current List
+                bigListNames.push(todo.firstChild.firstChild.textContent);
 
 
                 bodyItems.forEach((item)=>{ //loops through the current list's items
-                    let  checkbox = item.childNodes[0].checked;
-                    let itemMsg = item.childNodes[1].textContent;
-
-                    bigList[listNum].push({checkbox,itemMsg}); 
+                    //add each item's checked state and message to the current bigList index
+                    bigList[listNum].push({checkbox:item.childNodes[0].checked,itemMsg:item.childNodes[1].textContent}); 
                 });
                 listNum++;
             });
             return {bigList,bigListNames};
         },
-        //BIG LIST
-        findBigListX,
         removeBigList: function (stuff) {
             stuff.remove();
         },
-        renderEmptyList: function (name, id) {
-            console.log(name + " id" + id);
-            let cardHolder = makeDiv(DOMStrings.cardHolder, id);
+        renderEmptyList: function (name) {
+            let cardHolder = makeDiv(DOMStrings.cardHolder);
 
 
-            //create card's header
-            let cardHeader = makeDiv(DOMStrings.cardHead, id);
-            let cardHeadTitle = makeDiv(DOMStrings.cardHeadTitle, id);
+            //**create card's header
+            let cardHeader = makeDiv(DOMStrings.cardHead);
+            let cardHeadTitle = makeDiv(DOMStrings.cardHeadTitle);
             cardHeadTitle.textContent = name;
-            let cardHeadClose = makeBtn(DOMStrings.cardHeadClose, id);
+            let cardHeadClose = makeBtn(DOMStrings.cardHeadClose);
             cardHeadClose.textContent = "+";
             cardHeader.appendChild(cardHeadTitle);
             cardHeader.appendChild(cardHeadClose);
 
-            //create card's body
-            let cardBody = makeDiv(DOMStrings.cardBody, id);
+            //**create card's body
+            let cardBody = makeDiv(DOMStrings.cardBody);
 
 
-            //create card's footer
-            let cardFooter = makeDiv(DOMStrings.cardFooter, id);
-            let cardFooterAddBtn = makeBtn(DOMStrings.cardFooterAddBtn, id);
+            //**create card's footer
+            let cardFooter = makeDiv(DOMStrings.cardFooter);
+            let cardFooterAddBtn = makeBtn(DOMStrings.cardFooterAddBtn);
             let cardFooterInput = document.createElement("input");
             cardFooterInput.setAttribute("class", DOMStrings.cardFooterInput);
-            cardFooter.setAttribute("data-group",id);
             cardFooter.setAttribute("placeholder", "New Task")
             cardFooterAddBtn.textContent = "+ Add Item";
             cardFooter.appendChild(cardFooterInput);
@@ -145,33 +141,37 @@ let UIController = (function () {
             //add card holder to the body.
             board.appendChild(cardHolder);
 
-            //TODO: Potentially Relocate dragula container
-            //dragula test
+            //Add the Body to dragula for drag funcionality
             drake.containers.push(cardBody);
             return cardHolder;
         },
         //TASKS
-        addTask:function({cBody,input, itemId}){
+        addTask:function({cBody,input, checkBox}){
             let item = makeDiv(DOMStrings.item);
-            item.setAttribute(DOMStrings.itemId, itemId);
+
+            //make checkbox
             let checkbox = document.createElement("input");
             checkbox.setAttribute("class", DOMStrings.itemCheck);
             checkbox.setAttribute("type","checkbox");
-            
-            //set content
+            if(checkBox === true){
+                checkbox.checked = true;
+            }
+
+            //make content
             let content = makeDiv(DOMStrings.itemContent);
             content.textContent = input;
-            let removeItem = makeBtn(DOMStrings.itemRemove);
-            removeItem.textContent = "+";
+            let removeItemBtn = makeBtn(DOMStrings.itemRemove);
+            removeItemBtn.textContent = "+";
+            
             //append to item
             item.appendChild(checkbox);
             item.appendChild(content);
-            item.appendChild(removeItem);
+            item.appendChild(removeItemBtn);
 
             //append to actual card body
             cBody.appendChild(item);
 
-            return {item,removeItem};
+            return {item,removeItemBtn};
         },
         removeTask:function(item){
             item.remove();
