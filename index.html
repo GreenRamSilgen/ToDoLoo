@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To Do Loo</title>
+    <meta charset="UTF-8"/>
+    <script
+    src="https://kit.fontawesome.com/5c60b333ef.js"
+    crossorigin="anonymous"
+  ></script>
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="../node_modules/dragula/dist/dragula.css" />
+    <link
+      rel="stylesheet"
+      href="../node_modules/dragula/dist/dragula.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>To Do List</header>
+    <div class="makeList">
+      <button id="newList">+ NEW LIST</button>
+    </div>
+
+
+    <div id="board">
+
+    </div>
+    
+
+
+    <footer>
+      <div class="foot">
+        <a target="_blank" href="https://github.com/GreenRamSilgen"
+          ><i
+            class="fab fa-github-square fa-lg foot__icons"
+            title="My Github"
+          ></i
+        ></a>
+        <a
+          target="_blank"
+          href="https://github.com/GreenRamSilgen/WebTicTacToe"
+          ><i class="fas fa-code fa-lg foot__icons" title="Source Code"></i
+        ></a>
+      </div>
+    </footer>
+  </body>
+
+<!-- Modal Section-->
+<div class="bg-modal">
+  <div class="modal__content">
+    <div class="close">+</div>
+    <form id="userInput">
+      <legend style="text-align: center;">New List</legend>
+      <input type="text" name="title" placeholder="List Name" required>
+      <input type="submit" id="modalSubmit" class="newListBtn">
+    </form>
+  </div>
+</div>
+<!-- Modal Section-->
+        <!-- Scripts -->
+        <script src="main.js"></script>
+</html>
