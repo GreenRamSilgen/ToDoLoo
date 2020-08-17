@@ -4,7 +4,7 @@ import {
 import {
     storageController
 } from './storeControl'
-
+import './main.css'
 
 let MainController = (function (UICtrl, StoreCtrl) {
     let DOMStrings = UICtrl.getDOMStrings();
@@ -106,8 +106,9 @@ let MainController = (function (UICtrl, StoreCtrl) {
      * If it is pressed a new Item will be generated and added to DOM.
      */
     function giveAddItemBtnFuncionality(card){
+        let newItem;
         card.lastChild.lastChild.addEventListener('click', () => {
-            let newItem = UICtrl.addTask({
+            newItem = UICtrl.addTask({
                 cBody:card.firstChild.nextSibling,
                 input:card.lastChild.firstChild.value,
             });
@@ -123,7 +124,7 @@ let MainController = (function (UICtrl, StoreCtrl) {
      */
     function addItemCloseBtnFunctionality(item){
         item.removeItemBtn.addEventListener('click', () => {
-            UICtrl.removeTask(newItem.item);
+            UICtrl.removeTask(item);
         });
     }
 

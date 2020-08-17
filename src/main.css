@@ -151,8 +151,17 @@ footer {
     padding: 10px;
     margin: 10px 0px;
 }
+.item:hover{
+    transform: scale(1.05);
+    transition: transform 200ms ease-out;
+}
+
 .item__checkbox{
 }
+.item__checkbox:hover{
+    cursor: pointer;
+}
+
 .item__content{
     flex-grow: 1;
     margin: 0px 0.5em;

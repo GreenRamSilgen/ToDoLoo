@@ -173,8 +173,8 @@ let UIController = (function () {
 
             return {item,removeItemBtn};
         },
-        removeTask:function(item){
-            item.remove();
+        removeTask:function(nItem){
+            nItem.item.remove();
         },
         //MODAL TOGGLE
         newListToggle: function () {
